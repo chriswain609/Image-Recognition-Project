@@ -51,13 +51,13 @@ public class Home extends JFrame {
 		JButton btnImageRecognition = new JButton("Image Recognition");
 		btnImageRecognition.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//try {
+				try {
 					UploadImage imageUp = new UploadImage();
 					imageUp.setVisible(true);
 					frame.dispose();
-			//	}catch(Exception e1) {
+				}catch(Exception e1) {
 					//JOptionPane.showMessageDialog(null, e1);
-				//}
+				}
 			}
 		});
 		btnImageRecognition.setBounds(244, 178, 146, 32);
