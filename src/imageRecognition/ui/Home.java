@@ -15,7 +15,7 @@ public class Home extends JFrame {
 
 	private JPanel contentPane;
 	
-	private JFrame frame;
+	private static JFrame frame;
 
 	/**
 	 * Launch the application.
@@ -24,7 +24,7 @@ public class Home extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Home frame = new Home();
+					frame = new Home();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
