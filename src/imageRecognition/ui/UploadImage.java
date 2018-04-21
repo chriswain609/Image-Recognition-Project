@@ -81,3 +81,4 @@ public class UploadImage extends JFrame {
 		btnChooseImage.setBounds(60, 404, 117, 42);
 		contentPane.add(btnChooseImage);
 	}
+}
