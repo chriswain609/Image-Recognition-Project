@@ -42,6 +42,7 @@ public class UploadImage extends JFrame {
 	 * Create the frame.
 	 */
 	public UploadImage() {
+		setTitle("Image Recognition Upload");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 541, 486);
 		contentPane = new JPanel();
