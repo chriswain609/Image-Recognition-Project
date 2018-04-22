@@ -24,10 +24,10 @@ public class AdminLogin extends JFrame //implements ActionListener
 	
 	private JPanel contentPane;
 	
-	private static JFrame frame;
+	private static JFrame frame, nextFrame;
 	
 	JTextField username, password;
-	JButton login;
+	JButton login, back;
 	JLabel userLabel, passwordLabel, errorLabel;
 
 
@@ -63,7 +63,7 @@ public class AdminLogin extends JFrame //implements ActionListener
 		Username();
 		Password();
 		LoginButton();
-//		ErrorMessage();
+		BackButton();
 	}
 	
 	public void Username() 
@@ -105,12 +105,47 @@ public class AdminLogin extends JFrame //implements ActionListener
 		login.setBounds(230, 250, 100, 40);
 		login.addActionListener(new ActionListener() 
 		{
-			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				ErrorMessage();
+				try
+				{
+					if (username.getText() == "admin" && password.getText() == "password")
+					{
+//						nextFrame = new AdminPage();
+						nextFrame.setVisible(true);
+						frame.dispose();
+					} else 
+					{
+						ErrorMessage();
+						revalidate();
+						repaint();
+					}
+				} catch (Exception e1)
+				{
+					JOptionPane.showMessageDialog(null, e1);
+				}
 			}
+			
 		});
 		add(login);
+	}
+	
+	public void BackButton()
+	{
+		back = new JButton("Back");
+		back.setBounds(20, 20, 100, 20);
+		back.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					nextFrame = new Home();
+					nextFrame.setVisible(true);
+					frame.dispose();
+					JOptionPane.setRootFrame(nextFrame);
+				}catch(Exception e1) {
+					JOptionPane.showMessageDialog(null, e1);
+				}
+			}
+		});
+		add(back);
 	}
 }
