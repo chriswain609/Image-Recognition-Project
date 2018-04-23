@@ -150,5 +150,20 @@ public class UploadImage extends JFrame {
 		});
 		btnSubmit.setBounds(416, 320, 117, 42);
 		contentPane.add(btnSubmit);
+		
+		JButton btnBack = new JButton("Back");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					
+					Home.getHome().setVisible(true);
+					Home.getImageUp().dispose();
+				}catch(Exception e3) {
+					JOptionPane.showMessageDialog(null, e3);
+				}
+			}
+		});
+		btnBack.setBounds(26, 12, 98, 23);
+		contentPane.add(btnBack);
 	}
 }
