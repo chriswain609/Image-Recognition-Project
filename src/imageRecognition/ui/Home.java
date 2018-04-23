@@ -16,6 +16,12 @@ public class Home extends JFrame {
 	private JPanel contentPane;
 	
 	private static JFrame frame;
+	
+	private static AdminLogin login;
+	
+	public static AdminLogin get() {
+		return login;
+	}
 
 	/**
 	 * Launch the application.
@@ -46,6 +52,13 @@ public class Home extends JFrame {
 		contentPane.setLayout(null);
 		
 		JButton btnAdmin = new JButton("Admin");
+		btnAdmin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				login = new AdminLogin();
+				login.setVisible(true);
+				frame.dispose();
+			}
+		});
 		btnAdmin.setBounds(78, 178, 146, 32);
 		contentPane.add(btnAdmin);
 		
