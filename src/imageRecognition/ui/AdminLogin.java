@@ -13,26 +13,22 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import imageRecognition.ui.Home;
 
-public class AdminLogin extends JFrame //implements ActionListener
-{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
+public class AdminLogin extends JFrame {
+
 	private JPanel contentPane;
+	private JTextField txtUsername;
+	private JTextField txtPassword;
 	
 	private static JFrame frame, nextFrame;
+
+	/**
+	 * Launch the application.
+	 */
 	
-	JTextField username, password;
-	JButton login, back;
-	JLabel userLabel, passwordLabel, errorLabel;
-
-
-	public static void main(String[] args) 
-	{
+	
+	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -45,75 +41,49 @@ public class AdminLogin extends JFrame //implements ActionListener
 		});
 	}
 	
-	public AdminLogin() 
+	public void ErrorMessage()
 	{
-		setTitle("Admin Login");
+		JLabel errorLabel = new JLabel("Error");
+		errorLabel.setText("Incorrect username and/or password.");
+		errorLabel.setForeground(Color.RED);
+		errorLabel.setBounds(110, 220, 400, 20);
+		add(errorLabel);
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public AdminLogin() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 541, 486);
+		setBounds(100, 100, 450, 453);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		Initialise();
-	}
-	
-	public void Initialise()
-	{
-		Username();
-		Password();
-		LoginButton();
-		BackButton();
-	}
-	
-	public void Username() 
-	{
-		userLabel = new JLabel("Username");
-		userLabel.setText("Username:");
-		userLabel.setBounds(160, 160, 100, 20);
-		add(userLabel);
-		setLayout(null);
-		username = new JTextField(5);
-		username.setBounds(230, 161, 100, 20);
-		add(username);
-	}
-	
-	public void Password()
-	{
-		passwordLabel = new JLabel("Password");
-		passwordLabel.setText("Password:");
-		passwordLabel.setBounds(160, 190, 100, 20);
-		add(passwordLabel);
-		setLayout(null);
-		password = new JTextField(5);
-		password.setBounds(230, 191, 100, 20);
-		add(password);
-	}
-	
-	public void ErrorMessage()
-	{
-		errorLabel = new JLabel("Error");
-		errorLabel.setText("Incorrect username and/or password.");
-		errorLabel.setForeground(Color.RED);
-		errorLabel.setBounds(170, 220, 400, 20);
-		add(errorLabel);
-	}
-	
-	public void LoginButton()
-	{
-		login = new JButton("Login");
-		login.setBounds(230, 250, 100, 40);
-		login.addActionListener(new ActionListener() 
-		{
-			public void actionPerformed(ActionEvent e)
-			{
+		JButton btnBack = new JButton("Back");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					Home home = new Home();
+					home.setVisible(true);
+					Home.get().dispose();
+				}catch(Exception e1) {
+					JOptionPane.showMessageDialog(null, e1);
+				}
+			}
+		});
+		btnBack.setBounds(23, 25, 117, 29);
+		contentPane.add(btnBack);
+		
+		JButton btnLogin = new JButton("Login");
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				try
 				{
-					if (username.getText() == "admin" && password.getText() == "password")
+					if (txtUsername.getText() == "admin" && txtPassword.getText() == "password")
 					{
-//						nextFrame = new AdminPage();
-						nextFrame.setVisible(true);
-						frame.dispose();
+						
 					} else 
 					{
 						ErrorMessage();
@@ -125,27 +95,28 @@ public class AdminLogin extends JFrame //implements ActionListener
 					JOptionPane.showMessageDialog(null, e1);
 				}
 			}
-			
 		});
-		add(login);
-	}
-	
-	public void BackButton()
-	{
-		back = new JButton("Back");
-		back.setBounds(20, 20, 100, 20);
-		back.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					nextFrame = new Home();
-					nextFrame.setVisible(true);
-					frame.dispose();
-					JOptionPane.setRootFrame(nextFrame);
-				}catch(Exception e1) {
-					JOptionPane.showMessageDialog(null, e1);
-				}
-			}
-		});
-		add(back);
+		btnLogin.setBounds(169, 317, 117, 29);
+		contentPane.add(btnLogin);
+		
+		JLabel lblUsername = new JLabel("Username:");
+		lblUsername.setBounds(123, 149, 66, 16);
+		contentPane.add(lblUsername);
+		
+		JLabel lblPassword = new JLabel("Password:");
+		lblPassword.setBounds(123, 177, 66, 16);
+		contentPane.add(lblPassword);
+		
+		txtUsername = new JTextField();
+		txtUsername.setBounds(201, 144, 130, 26);
+		contentPane.add(txtUsername);
+		txtUsername.setColumns(10);
+		
+		txtPassword = new JTextField();
+		txtPassword.setColumns(10);
+		txtPassword.setBounds(201, 172, 130, 26);
+		contentPane.add(txtPassword);
+		
+		
 	}
 }
