@@ -65,9 +65,8 @@ public class AdminLogin extends JFrame {
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Home home = new Home();
-					home.setVisible(true);
-					Home.get().dispose();
+					Home.getHome().setVisible(true);
+					Home.getLogin().dispose();
 				}catch(Exception e1) {
 					JOptionPane.showMessageDialog(null, e1);
 				}
