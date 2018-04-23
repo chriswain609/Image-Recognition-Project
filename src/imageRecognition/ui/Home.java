@@ -15,13 +15,25 @@ public class Home extends JFrame {
 
 	private JPanel contentPane;
 	
-	private static JFrame frame;
+	//private static JFrame frame;
 	
 	private static AdminLogin login;
+	private static UploadImage imageUp;
+	private static Home home;
 	
-	public static AdminLogin get() {
+	public static AdminLogin getLogin() {
 		return login;
 	}
+	
+	public static UploadImage getImageUp() {
+		return imageUp;
+	}
+	
+	public static Home getHome() {
+		return home;
+	}
+	
+	
 
 	/**
 	 * Launch the application.
@@ -30,8 +42,8 @@ public class Home extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					frame = new Home();
-					frame.setVisible(true);
+					home = new Home();
+					home.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -56,7 +68,7 @@ public class Home extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				login = new AdminLogin();
 				login.setVisible(true);
-				frame.dispose();
+				home.setVisible(false);
 			}
 		});
 		btnAdmin.setBounds(78, 178, 146, 32);
@@ -66,9 +78,9 @@ public class Home extends JFrame {
 		btnImageRecognition.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
-					UploadImage imageUp = new UploadImage();
+					imageUp = new UploadImage();
 					imageUp.setVisible(true);
-					frame.dispose();
+					home.setVisible(false);
 				}catch(Exception e1) {
 					//JOptionPane.showMessageDialog(null, e1);
 				}
