@@ -20,14 +20,17 @@ public class AdminLogin extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtUsername;
 	private JTextField txtPassword;
+	public static AdminPage admin;
 	
-	private static JFrame frame, nextFrame;
+	private static JFrame frame;
+	
+	public static AdminPage getAdmin() {
+		return admin;
+	}
 
 	/**
 	 * Launch the application.
-	 */
-	
-	
+	 */	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -80,9 +83,11 @@ public class AdminLogin extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				try
 				{
-					if (txtUsername.getText() == "admin" && txtPassword.getText() == "password")
+					if (txtUsername.getText().trim().equals("admin") && txtPassword.getText().trim().equals("password"))
 					{
-						
+						admin = new AdminPage();
+						admin.setVisible(true);
+						Home.getLogin().setVisible(false);
 					} else 
 					{
 						ErrorMessage();
