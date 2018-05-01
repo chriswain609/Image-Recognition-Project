@@ -10,12 +10,13 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+import java.awt.Font;
 
 public class Home extends JFrame {
 
 	private JPanel contentPane;
-	
-	//private static JFrame frame;
 	
 	private static AdminLogin login;
 	private static UploadImage imageUp;
@@ -33,8 +34,6 @@ public class Home extends JFrame {
 		return home;
 	}
 	
-	
-
 	/**
 	 * Launch the application.
 	 */
@@ -88,5 +87,10 @@ public class Home extends JFrame {
 		});
 		btnImageRecognition.setBounds(244, 178, 146, 32);
 		contentPane.add(btnImageRecognition);
+		
+		JLabel lblNewLabel = new JLabel("Welcome to the Image Recognition System");
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblNewLabel.setBounds(85, 81, 305, 32);
+		contentPane.add(lblNewLabel);
 	}
 }
