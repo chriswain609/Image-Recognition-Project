@@ -4,6 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -38,7 +43,12 @@ public class AdminPage extends JFrame {
 	private JPanel contentPane;
 	public JTable imagesTable;
 	private JTable analysisTable;
-	private JTextField filterTextBox;
+	private JTextField viewTextBox;
+	private static ImageView viewImage;
+	
+	public static ImageView getViewer() {
+		return viewImage;
+	} 
 
 	/**
 	 * Launch the application.
@@ -108,6 +118,7 @@ public class AdminPage extends JFrame {
         
         /* ***************** END OF TABLE ******************* */
         
+        // Log out button
         JButton btnLogOut = new JButton("Log out");
         btnLogOut.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
@@ -127,8 +138,7 @@ public class AdminPage extends JFrame {
         JScrollPane analysisPane = new JScrollPane();
         analysisPane.setBounds(402, 124, 202, 296);
         contentPane.add(analysisPane);
-        // Sets the row header.
-        int data [] = null;
+        
         String[]  rowNames = {"No. of images", "No. correct", "Average Confidence", "Av. conf. of correct", 
         		"Av. conf. of incorrect", "Percentage correct"};
         
@@ -141,6 +151,8 @@ public class AdminPage extends JFrame {
         
         int numImages = 0;
         int numCorrect = 0;
+        int totalConfidence = 0;
+        
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
             Connection con = DriverManager.getConnection(
@@ -154,27 +166,73 @@ public class AdminPage extends JFrame {
             
             
             Statement statement = con.createStatement();
-            int columns;
             ResultSet resultSet;
-            ResultSetMetaData metaData;
             
+            // No. of images
             resultSet = statement.executeQuery(sqlRow1);
-            metaData = resultSet.getMetaData();
-            columns = metaData.getColumnCount();
-            for (int i = 0; i <= columns; i++) {
+            while (resultSet.next()) {
                numImages++;
             }
             row1 = numImages;
             
+            // No. correct
             resultSet = statement.executeQuery(sqlRow2);
-            metaData = resultSet.getMetaData();
-            columns = metaData.getColumnCount();
-            for (int i = 0; i <= columns; i++) {
+            while (resultSet.next()) {
                numCorrect++;
             }
             row2 = numCorrect;
-        
-         
+            
+            // Average Confidence
+            resultSet = statement.executeQuery(sqlRow3);
+            while (resultSet.next()) {
+            	totalConfidence += resultSet.getInt(1);
+            }
+            if (numImages == 0) {
+            	row3 = 0;
+            } else {
+            	row3 = totalConfidence / numImages;
+            }
+            
+            // Av. conf. of correct
+            resultSet = statement.executeQuery(sqlRow4);
+            numImages = 0;
+            totalConfidence = 0;
+            while (resultSet.next()) {
+                numImages++;
+            	totalConfidence += resultSet.getInt(1);
+            }
+            if (numImages == 0) {
+            	row4 = 0;
+            } else {
+            	row4 = totalConfidence / numImages;
+            }
+            
+            // Av. conf. of incorrect
+            resultSet = statement.executeQuery(sqlRow5);
+            numImages = 0;
+            totalConfidence = 0;
+            while (resultSet.next()) {
+                numImages++;
+            	totalConfidence += resultSet.getInt(1);
+            }
+            if (numImages == 0) {
+            	row5 = 0;
+            } else {
+            	row5 = totalConfidence / numImages;
+            }
+            
+            // Percentage correct
+            resultSet = statement.executeQuery(sqlRow1);
+            numImages = 0;
+            while (resultSet.next()) {
+                numImages++;
+            }
+            if (numImages == 0) {
+            	row6 = 0;
+            } else {
+            	row6 = (numCorrect / numImages) * 100;
+            }
+            
             resultSet.close();
             statement.close();
         } catch (Exception e) {
@@ -207,26 +265,76 @@ public class AdminPage extends JFrame {
        
         /* *************** END OF TABLE ******************* */
         
-        JLabel lblAnalysisBox = new JLabel("Analysis of selected images");
+        // Analysis Label
+        JLabel lblAnalysisBox = new JLabel("Analysis of images");
         lblAnalysisBox.setFont(new Font("Tahoma", Font.BOLD, 14));
         lblAnalysisBox.setHorizontalAlignment(SwingConstants.CENTER);
         lblAnalysisBox.setBounds(392, 87, 212, 26);
         contentPane.add(lblAnalysisBox);
         
-        JLabel lblTagFilter = new JLabel("Tag filter:");
-        lblTagFilter.setFont(new Font("Tahoma", Font.BOLD, 14));
-        lblTagFilter.setBounds(60, 431, 72, 23);
-        contentPane.add(lblTagFilter);
+        // View Image Label
+        JLabel lblSearchImage = new JLabel("View image:");
+        lblSearchImage.setFont(new Font("Tahoma", Font.BOLD, 14));
+        lblSearchImage.setBounds(41, 431, 98, 23);
+        contentPane.add(lblSearchImage);
         
-        filterTextBox = new JTextField();
-        filterTextBox.setBounds(131, 434, 106, 20);
-        contentPane.add(filterTextBox);
-        filterTextBox.setColumns(10);
+        // Text Bow for image view
+        viewTextBox = new JTextField();
+        viewTextBox.setBounds(131, 434, 106, 20);
+        contentPane.add(viewTextBox);
+        viewTextBox.setColumns(10);
         
-        JButton btnAnalyse = new JButton("Analyse");
-        btnAnalyse.setBounds(261, 433, 89, 23);
-        contentPane.add(btnAnalyse);
+        // Button to view image
+        JButton btnView = new JButton("View");
+        btnView.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				try {
+					JOptionPane.showMessageDialog(null, "Wait for image to load. Please click okay.");
+					Class.forName("com.mysql.jdbc.Driver").newInstance();
+					Connection con = DriverManager.getConnection(
+							"jdbc:mysql://mysql.csc.liv.ac.uk:3306/u5af", "u5af", "");
+			        
+					Statement statement = con.createStatement();
+		            ResultSet resultSet;
+		            resultSet = statement.executeQuery("SELECT image FROM images WHERE label = '"+viewTextBox.getText().trim()+"'");
+//		            if (resultSet.next() == null) {
+//		            	resultSet.close();
+//		            	ErrorMessage();
+//		            	revalidate();
+//		            	repaint();
+//		            	break;
+//		            }
+		            int i = 0;
+					while (resultSet.next()) {
+						InputStream in = resultSet.getBinaryStream(1);
+						OutputStream f = new FileOutputStream(new File("tempImageFile.jpg"));
+						i++;
+						int c = 0;
+						while ((c = in.read()) > -1) {
+							f.write(c);
+						}
+						f.close();
+						in.close();
+					}
+					
+					viewImage = new ImageView();
+					viewImage.setVisible(true);
+				}catch(Exception e1) {
+					JOptionPane.showMessageDialog(null, e1);
+				}
+			}
+		});
+        btnView.setBounds(261, 433, 89, 23);
+        contentPane.add(btnView);
         
 	}
+	
+//	public void ErrorMessage() {
+//		JLabel lblErrorMessage = new JLabel("Please enter a valid label name");
+//        lblErrorMessage.setFont(new Font("Tahoma", Font.BOLD, 12));
+//        lblErrorMessage.setForeground(Color.RED);
+//        lblErrorMessage.setBounds(96, 465, 202, 14);
+//        contentPane.add(lblErrorMessage);
+//	}
 }
 
