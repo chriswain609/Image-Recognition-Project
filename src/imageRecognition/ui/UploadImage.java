@@ -29,9 +29,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.awt.event.ActionEvent;
+
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
+
+import ml.ImageAnalyzer9000;
 
 public class UploadImage extends JFrame {
 
@@ -140,6 +143,10 @@ public class UploadImage extends JFrame {
 		JButton btnAnalyse = new JButton("Analyse");
 		btnAnalyse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				ImageAnalyzer9000 ia9000 = new ImageAnalyzer9000(selectedFile.getAbsolutePath());
+				String ko [] = ia9000.getLabel();
+				lblImageGuess.setText(ko[0]);
+				lblConfidenceOutput.setText(ko[1]);
 				analysed = true;
 			}
 		});
