@@ -20,6 +20,25 @@ import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
 import java.io.ByteArrayOutputStream;
+package imageRecognition.ui;
+
+import java.awt.Color;
+import java.awt.EventQueue;
+import java.awt.Image;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -31,13 +50,16 @@ import java.sql.Statement;
 import java.awt.event.ActionEvent;
 
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
 
 import ml.ImageAnalyzer9000;
 
 public class UploadImage extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private boolean analysed = false;
 	private boolean imageChosen = false;
@@ -65,6 +87,7 @@ public class UploadImage extends JFrame {
 	 * Create the frame.
 	 */
 	public UploadImage() {
+		setTitle("Image Recognition Page");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 724, 484);
 		contentPane = new JPanel();
@@ -117,7 +140,7 @@ public class UploadImage extends JFrame {
 		contentPane.add(lblConfidence);
 		
 		JLabel lblImageGuess = new JLabel("");
-		lblImageGuess.setBounds(535, 125, 84, 16);
+		lblImageGuess.setBounds(535, 125, 100, 16);
 		contentPane.add(lblImageGuess);
 		
 		JLabel lblConfidenceOutput = new JLabel("");
