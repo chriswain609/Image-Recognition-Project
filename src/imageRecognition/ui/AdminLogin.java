@@ -1,6 +1,5 @@
 package imageRecognition.ui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -17,6 +16,10 @@ import imageRecognition.ui.Home;
 
 public class AdminLogin extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtUsername;
 	private JTextField txtPassword;
@@ -57,6 +60,7 @@ public class AdminLogin extends JFrame {
 	 * Create the frame.
 	 */
 	public AdminLogin() {
+		setTitle("Admin Login Page");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 453);
 		contentPane = new JPanel();
@@ -86,7 +90,6 @@ public class AdminLogin extends JFrame {
 					if (txtUsername.getText().trim().equals("admin") && txtPassword.getText().trim().equals("password"))
 					{
 						admin = new AdminPage();
-						admin.setVisible(true);
 						Home.getLogin().setVisible(false);
 					} else 
 					{
