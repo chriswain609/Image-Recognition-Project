@@ -1,12 +1,11 @@
 package imageRecognition.ui;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Connection;
@@ -20,26 +19,22 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
-import java.awt.Dimension;
-
-import javax.swing.ListSelectionModel;
-import javax.swing.LookAndFeel;
 import javax.swing.SwingConstants;
 import javax.swing.JLabel;
-import javax.swing.JList;
 
 import java.awt.Font;
 import javax.swing.JTextField;
 
 public class AdminPage extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	public JTable imagesTable;
 	private JTable analysisTable;
@@ -74,7 +69,7 @@ public class AdminPage extends JFrame {
 		/* *************** DATABASE TABLE ******************* */
 	
 		Vector<String> columnNamesDB = new Vector<String>();
-        Vector<Object> dataDB = new Vector<Object>();
+        Vector<Vector> dataDB = new Vector<Vector>();
         contentPane = new JPanel();   //
         try {
             Class.forName("com.mysql.jdbc.Driver").newInstance();
@@ -296,14 +291,17 @@ public class AdminPage extends JFrame {
 			        
 					Statement statement = con.createStatement();
 		            ResultSet resultSet;
+		            ResultSet testStatement;
+		            testStatement = statement.executeQuery("SELECT COUNT(*) FROM images WHERE label = '"+viewTextBox.getText().trim()+"'");
+		            while (testStatement.next()) {
+		            	if (testStatement.getInt(1) == 0) {
+			            	ErrorMessage();
+			            	revalidate();
+			            	repaint();
+			            	return;
+		            	}
+		            }
 		            resultSet = statement.executeQuery("SELECT image FROM images WHERE label = '"+viewTextBox.getText().trim()+"'");
-//		            if (resultSet.next() == null) {
-//		            	resultSet.close();
-//		            	ErrorMessage();
-//		            	revalidate();
-//		            	repaint();
-//		            	break;
-//		            }
 		            int i = 0;
 					while (resultSet.next()) {
 						InputStream in = resultSet.getBinaryStream(1);
@@ -317,6 +315,7 @@ public class AdminPage extends JFrame {
 						in.close();
 					}
 					
+					resultSet.close();
 					viewImage = new ImageView();
 					viewImage.setVisible(true);
 				}catch(Exception e1) {
@@ -329,12 +328,11 @@ public class AdminPage extends JFrame {
         
 	}
 	
-//	public void ErrorMessage() {
-//		JLabel lblErrorMessage = new JLabel("Please enter a valid label name");
-//        lblErrorMessage.setFont(new Font("Tahoma", Font.BOLD, 12));
-//        lblErrorMessage.setForeground(Color.RED);
-//        lblErrorMessage.setBounds(96, 465, 202, 14);
-//        contentPane.add(lblErrorMessage);
-//	}
+	public void ErrorMessage() {
+		JLabel lblErrorMessage = new JLabel("Please enter a valid label name");
+        lblErrorMessage.setFont(new Font("Tahoma", Font.BOLD, 12));
+        lblErrorMessage.setForeground(Color.RED);
+        lblErrorMessage.setBounds(96, 465, 202, 14);
+        contentPane.add(lblErrorMessage);
+	}
 }
-
